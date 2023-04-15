@@ -16,6 +16,7 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public Car create(Car newCar) {
+        newCar.setName(newCar.getBrand() + " " + newCar.getModelOfCar());
         Car ret = carRepository.save(newCar);
         return ret;
     }
@@ -23,16 +24,16 @@ public class CarServiceImpl implements CarService{
     @Override
     public Car getById(long id) {
         Car car = carRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Supplier not found."));
+                .orElseThrow(() -> new RecordNotFoundException("Car not found."));
         return car;
     }
 
     @Override
     public void update(Car car) throws RecordNotFoundException {
         Car existingCar = carRepository.findById(car.getId())
-                .orElseThrow(() -> new RecordNotFoundException("Account not found."));
+                .orElseThrow(() -> new RecordNotFoundException("Car not found."));
 
-        existingCar.setName(car.getName());
+        existingCar.setName(car.getBrand() + " " + car.getModelOfCar());
         existingCar.setBrand(car.getBrand());
         existingCar.setYearOfProduction(car.getYearOfProduction());
         existingCar.setModelOfCar(car.getModelOfCar());
@@ -49,7 +50,7 @@ public class CarServiceImpl implements CarService{
         if(exists){
             carRepository.deleteById(id);
         }else {
-            throw new RecordNotFoundException("Supplier not found.");
+            throw new RecordNotFoundException("Car not found.");
         }
     }
 

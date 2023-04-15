@@ -19,12 +19,11 @@ public class Car {
     @JoinColumn(name="order_id")
     private Order order;
 
-    @NotNull
     private String name;
 
     @NotNull
     private String brand;
-
+    @NotNull
     private String yearOfProduction;
 
     private String modelOfCar;
@@ -34,11 +33,11 @@ public class Car {
     @NotNull
     private Double price;
 
-    public Car(long id, Order order, @NotNull String name, @NotNull String brand,
-               String yearOfProduction, String modelOfCar, int km, @NotNull Double price) {
+    public Car(long id, Order order, @NotNull String brand,
+               String yearOfProduction,@NotNull String modelOfCar, int km, @NotNull Double price) {
         this.id = id;
         this.order = order;
-        this.name = name;
+        this.name = brand + " " + modelOfCar;
         this.brand = brand;
         this.yearOfProduction = yearOfProduction;
         this.modelOfCar = modelOfCar;
