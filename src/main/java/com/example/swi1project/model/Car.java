@@ -14,7 +14,7 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name="order_id")
     private Order order;
@@ -24,7 +24,7 @@ public class Car {
     @NotNull
     private String brand;
     @NotNull
-    private String yearOfProduction;
+    private int yearOfProduction;
 
     private String modelOfCar;
 
@@ -34,7 +34,7 @@ public class Car {
     private Double price;
 
     public Car(long id, Order order, @NotNull String brand,
-               String yearOfProduction,@NotNull String modelOfCar, int km, @NotNull Double price) {
+               int yearOfProduction,@NotNull String modelOfCar, int km, @NotNull Double price) {
         this.id = id;
         this.order = order;
         this.name = brand + " " + modelOfCar;
@@ -81,11 +81,11 @@ public class Car {
         this.brand = brand;
     }
 
-    public String getYearOfProduction() {
+    public int getYearOfProduction() {
         return yearOfProduction;
     }
 
-    public void setYearOfProduction(String yearOfProduction) {
+    public void setYearOfProduction(int yearOfProduction) {
         this.yearOfProduction = yearOfProduction;
     }
 

@@ -2,16 +2,22 @@ package com.example.swi1project.services;
 
 import com.example.swi1project.exception.RecordNotFoundException;
 import com.example.swi1project.model.Car;
+import com.example.swi1project.model.Order;
 import com.example.swi1project.repository.CarRepository;
+import com.example.swi1project.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CarServiceImpl implements CarService{
     private CarRepository carRepository;
+    private OrderRepository orderRepository;
 
     public CarServiceImpl(CarRepository carRepository) {
         this.carRepository = carRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -30,8 +36,12 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public void update(Car car) throws RecordNotFoundException {
-        Car existingCar = carRepository.findById(car.getId())
-                .orElseThrow(() -> new RecordNotFoundException("Car not found."));
+        Optional<Car> optionalExistingCar = carRepository.findById(car.getId());
+        if (optionalExistingCar.isEmpty()) {
+            throw new RecordNotFoundException("Car not found.");
+        }
+        Car existingCar = optionalExistingCar.get();
+        Order existingOrder = existingCar.getOrder();
 
         existingCar.setName(car.getBrand() + " " + car.getModelOfCar());
         existingCar.setBrand(car.getBrand());
@@ -40,7 +50,17 @@ public class CarServiceImpl implements CarService{
         existingCar.setKm(car.getKm());
         existingCar.setPrice(car.getPrice());
 
-        Car updatedCar = carRepository.save(existingCar);
+        if (car.getOrder() != null) {
+            if (existingOrder != null) {
+                existingOrder.setId(car.getOrder().getId());
+            } else {
+                existingOrder = car.getOrder();
+                existingCar.setOrder(existingOrder);
+            }
+        } else {
+            existingCar.setOrder(null);
+        }
+
         carRepository.save(existingCar);
     }
 
@@ -62,5 +82,9 @@ public class CarServiceImpl implements CarService{
     @Override
     public List<Car> getByBrand(String brand) {
         return carRepository.findByBrand(brand);
+    }
+
+    public List<Car> getCarsNotInOrder() {
+        return carRepository.findByOrderIdIsNull();
     }
 }

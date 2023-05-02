@@ -1,5 +1,6 @@
 package com.example.swi1project.services;
 
+import com.example.swi1project.model.Customer;
 import com.example.swi1project.model.Order;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface OrderService {
     void delete(long id) throws Exception;
     List<Order> getAll();
     List<Order> getByName(String name);
+    Customer findCustomerByOrderId(long orderId);
 }

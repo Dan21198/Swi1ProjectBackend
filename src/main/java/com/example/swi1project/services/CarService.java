@@ -11,4 +11,5 @@ public interface CarService {
     void delete(long id) throws Exception;
     List<Car> getAll();
     List<Car> getByBrand(String brand);
+    List<Car> getCarsNotInOrder();
 }

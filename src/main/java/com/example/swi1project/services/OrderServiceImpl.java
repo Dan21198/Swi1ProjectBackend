@@ -1,7 +1,10 @@
 package com.example.swi1project.services;
 
 import com.example.swi1project.exception.RecordNotFoundException;
+import com.example.swi1project.model.Car;
+import com.example.swi1project.model.Customer;
 import com.example.swi1project.model.Order;
+import com.example.swi1project.repository.CustomerRepository;
 import com.example.swi1project.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,8 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService{
     private OrderRepository orderRepository;
+
+    private CustomerRepository customerRepository;
 
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -24,22 +29,31 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Order getById(long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Supplier not found."));
+                .orElseThrow(() -> new RecordNotFoundException("Order not found."));
         return order;
     }
 
     @Override
     public void update(Order order) throws RecordNotFoundException {
         Order existingOrder = orderRepository.findById(order.getId())
-                .orElseThrow(() -> new RecordNotFoundException("Account not found."));
+                .orElseThrow(() -> new RecordNotFoundException("Order not found."));
 
         existingOrder.setCustomer(order.getCustomer());
-        existingOrder.setCars(order.getCars());
-        existingOrder.setCost(order.getCost());
+        //existingOrder.setCars(order.getCars());
         existingOrder.setDateOfOrder(order.getDateOfOrder());
 
-        Order updatedCar = orderRepository.save(existingOrder);
+        Double cost = calculateOrderCost(existingOrder);
+        existingOrder.setCost(cost);
+
         orderRepository.save(existingOrder);
+    }
+
+    private Double calculateOrderCost(Order order) {
+        Double cost = 0.0;
+        for (Car car : order.getCars()) {
+            cost += car.getPrice();
+        }
+        return cost;
     }
 
     @Override
@@ -48,7 +62,7 @@ public class OrderServiceImpl implements OrderService{
         if(exists){
             orderRepository.deleteById(id);
         }else {
-            throw new RecordNotFoundException("Supplier not found.");
+            throw new RecordNotFoundException("Order not found.");
         }
     }
 
@@ -59,6 +73,15 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<Order> getByName(String name) {
+        return null;
+    }
+
+    @Override
+    public Customer findCustomerByOrderId(long orderId) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order != null) {
+            return order.getCustomer();
+        }
         return null;
     }
 }

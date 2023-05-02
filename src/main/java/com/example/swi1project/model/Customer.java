@@ -1,5 +1,7 @@
 package com.example.swi1project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "customers")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

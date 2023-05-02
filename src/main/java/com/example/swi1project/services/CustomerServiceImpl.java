@@ -2,15 +2,19 @@ package com.example.swi1project.services;
 
 import com.example.swi1project.exception.RecordNotFoundException;
 import com.example.swi1project.model.Customer;
+import com.example.swi1project.model.Order;
 import com.example.swi1project.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.swi1project.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CustomerServiceImpl implements CustomerService{
     private CustomerRepository customerRepository;
+
+    private OrderRepository orderRepository;
 
     public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
@@ -25,14 +29,14 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public Customer getById(long id) {
         Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Supplier not found."));
+                .orElseThrow(() -> new RecordNotFoundException("Customer not found."));
         return customer;
     }
 
     @Override
     public void update(Customer customer) throws RecordNotFoundException {
         Customer existingCustomer = customerRepository.findById(customer.getId())
-                .orElseThrow(() -> new RecordNotFoundException("Account not found."));
+                .orElseThrow(() -> new RecordNotFoundException("Customer not found."));
 
         existingCustomer.setName(customer.getName());
         existingCustomer.setSurName(customer.getSurName());
@@ -49,7 +53,7 @@ public class CustomerServiceImpl implements CustomerService{
         if(exists){
             customerRepository.deleteById(id);
         }else {
-            throw new RecordNotFoundException("Supplier not found.");
+            throw new RecordNotFoundException("Customer not found.");
         }
     }
 

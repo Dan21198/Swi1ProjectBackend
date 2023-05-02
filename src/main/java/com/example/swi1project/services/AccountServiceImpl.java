@@ -23,7 +23,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account getById(long id) {
         Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Supplier not found."));
+                .orElseThrow(() -> new RecordNotFoundException("Account not found."));
         return account;
     }
 
@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService{
         if(exists){
             accountRepository.deleteById(id);
         }else {
-            throw new RecordNotFoundException("Supplier not found.");
+            throw new RecordNotFoundException("Account not found.");
         }
     }
 

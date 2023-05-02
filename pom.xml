@@ -50,6 +50,11 @@
             <artifactId>istack-commons-runtime</artifactId>
             <version>4.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
 public class CarsController {
     private CarService carService;
@@ -40,6 +42,11 @@ public class CarsController {
     @GetMapping("/getCarById/{id}")
     public Car get(@PathVariable("id") long id) {
         return carService.getById(id);
+    }
+
+    @GetMapping("/cars/notInOrder")
+    public List<Car> getCarsNotInOrder() {
+        return carService.getCarsNotInOrder();
     }
 
     @PutMapping("/cars/{id}")
