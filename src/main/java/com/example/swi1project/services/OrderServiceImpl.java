@@ -39,7 +39,6 @@ public class OrderServiceImpl implements OrderService{
                 .orElseThrow(() -> new RecordNotFoundException("Order not found."));
 
         existingOrder.setCustomer(order.getCustomer());
-        //existingOrder.setCars(order.getCars());
         existingOrder.setDateOfOrder(order.getDateOfOrder());
 
         Double cost = calculateOrderCost(existingOrder);
